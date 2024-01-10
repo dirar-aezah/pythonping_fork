@@ -231,7 +231,6 @@ class ResponseList:
             self.rtt_avg = value.time_elapsed
             self.rtt_max = value.time_elapsed
             self.rtt_min = value.time_elapsed
-            self.rtt_maxSuccess = value.time_elapsed
         else:
             # Calculate the total of time, add the new value and divide for the new number
             self.rtt_avg = ((self.rtt_avg * (len(self)-1)) + value.time_elapsed) / len(self)
