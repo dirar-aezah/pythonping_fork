@@ -170,6 +170,7 @@ class ResponseList:
         self.rtt_min = 0
         self.rtt_max = 0
         self.rtt_maxSuccess = 0
+        self.rtt_avgSuccess = 0
         self.stats_packets_sent = 0
         self.stats_packets_returned = 0
         for response in initial_set:
@@ -213,6 +214,10 @@ class ResponseList:
     def rtt_maxSuccess_ms(self):
         return represent_seconds_in_ms(self.rtt_maxSuccess)
 
+    @property
+    def rtt_avgSuccess_ms(self):
+        return represent_seconds_in_ms(self.rtt_avgSuccess)
+
     def clear(self):
         self._responses = []
         self.stats_packets_sent = 0
@@ -236,8 +241,9 @@ class ResponseList:
                 self.rtt_min = value.time_elapsed
         if value.success:
             self.stats_packets_returned += 1
-            if value.time_elapsed > self.rtt_max:
-                self.rtt_max = value.time_elapsed
+            self.rtt_avgSuccess = ((self.rtt_avgSuccess * (len(self)-1)) + value.time_elapsed) / len(self)
+            if value.time_elapsed > self.rtt_maxSuccess:
+                self.rtt_maxSuccess = value.time_elapsed
 
         if self.verbose:
             print(value, file=self.output)
